@@ -64,7 +64,7 @@ public class Controller implements Initializable {
 
 		Image img = new Image("file:Map\\2.png");
 		GraphicsContext gc = canvas.getGraphicsContext2D();
-		GraphicsContext gc2 = canvas2.getGraphicsContext2D();
+//		GraphicsContext gc2 = canvas2.getGraphicsContext2D();
 		gc.drawImage(img,0,0,witdh,height);
 
 		sp.setContent(canvas);
@@ -85,7 +85,7 @@ public class Controller implements Initializable {
 					opt[1] = j;
 				}
 			}
-			fromTo(graph,opt[0],opt[1],gc2);
+			fromTo(graph,opt[0],opt[1],gc);
 
 		});
 
@@ -135,12 +135,13 @@ public class Controller implements Initializable {
 
 //		canvas.setOnMouseClicked(e -> {
 //
+//			e.MOUSE_DRAGGED
 ////			gc.setFill(Color.ORANGE);
 ////			gc.fillOval(e.getX(),e.getY(),10,10);
-//			pointList.add(point2d.add(e.getX(),e.getY()));
+////			pointList.add(point2d.add(e.getX(),e.getY()));
 //			System.out.println(e.getX()+" "+e.getY());
 //			txt1.setText(e.getX()+"");
-//			txt2.setText(e.getY()+"");
+////			txt2.setText(e.getY()+"");
 //
 //
 //		});
@@ -149,25 +150,28 @@ public class Controller implements Initializable {
 	public void drawGraph(GraphicsContext gc,Graph graph){
 		for(int i=0;i< graph.getVertex();i++){
 
-			gc.setFill(Color.ORANGE);
+			gc.setFill(Color.CORAL);
 			gc.fillOval(graph.VertexGetX(i),graph.VertexGetY(i),15,15);
-			gc.strokeText(graph.getVertexName(i),graph.VertexGetX(i)-20,graph.VertexGetY(i)-5);
-			gc.strokeText(i+"/",graph.VertexGetX(i)-30,graph.VertexGetY(i)-5);
+
+			gc.setFill(Color.BLACK);
+			gc.fillText(graph.getVertexName(i),graph.VertexGetX(i)-20,graph.VertexGetY(i)-5);
+			gc.fillText(i+"/",graph.VertexGetX(i)-30,graph.VertexGetY(i)-5);
 
 		}
 	}
 
 
 	/*Show path*/
-	public void fromTo(Graph graph,int src,int destination,GraphicsContext gc2){
+	public void fromTo(Graph graph,int src,int destination,GraphicsContext gc){
 		int[] distance = graph.findDijkstra(src);
 		txt1.setText("Distance from source:\n"+combo1.getValue()+" to "+combo2.getValue()+" is "+distance[destination]+" m\n"
 				+graph.printPath(src,destination));
-		gc2.clearRect(0,0,1920,1080);
-		gc2.setStroke(Color.RED);
-		graph.drawPath(src,destination,gc2);
-		gc2.stroke();
-		gc2.closePath();
+//		gc2.clearRect(0,0,1920,1080);
+		gc.setStroke(Color.TURQUOISE);
+		graph.drawPath(src,destination,gc);
+		gc.setLineWidth(2);
+		gc.stroke();
+		gc.closePath();
 	}
 
 

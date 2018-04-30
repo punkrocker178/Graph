@@ -16,7 +16,7 @@
       <ScrollPane fx:id="sp" pannable="true" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <content>
             <Canvas fx:id="canvas" height="1080" width="1920" />
-            <Canvas fx:id="canvas2" height="1080" width="1920" />
+            <!--<Canvas fx:id="canvas2" height="1080" width="1920" />-->
          </content>
       </ScrollPane>
    </center>
