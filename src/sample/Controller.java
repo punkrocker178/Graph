@@ -8,7 +8,10 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 
 import java.net.URL;
@@ -19,7 +22,14 @@ import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
 	@FXML
-	public Canvas canvas,canvas2;
+	public Canvas canvas;
+
+	public Pane pane;
+
+	public ImageView img;
+
+	@FXML
+	public StackPane stack;
 
 	@FXML
 	public Button btn1,btn2,btn3;
@@ -44,8 +54,6 @@ public class Controller implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
-//		Point2D point2d = new Point2D(0,0);
-//		ArrayList<Point2D> pointList = new ArrayList<Point2D>();
 		Graph graph = new Graph("Graph.txt");
 
 //		combo1.getItems().addAll("Vong Xoay CMT8",
@@ -62,16 +70,18 @@ public class Controller implements Initializable {
 		combo1.setEditable(true);
 		combo2.setEditable(true);
 
-		Image img = new Image("file:Map\\2.png");
+		Image image= new Image("file:Map\\2.png");
+		img.setImage(image);
+		sp.setContent(stack);
 		GraphicsContext gc = canvas.getGraphicsContext2D();
 //		GraphicsContext gc2 = canvas2.getGraphicsContext2D();
-		gc.drawImage(img,0,0,witdh,height);
+//		gc.drawImage(img,0,0,witdh,height);
 
-		sp.setContent(canvas);
-		sp.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
-		sp.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
-		sp.setFitToHeight(true); //center
-		sp.setFitToWidth(true); //center
+
+////		sp.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+////		sp.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+//		sp.setFitToHeight(true); //center
+//		sp.setFitToWidth(true); //center
 
 		final int[] opt = new int[2];
 		btn1.setOnAction(bt1 ->{
@@ -166,7 +176,7 @@ public class Controller implements Initializable {
 		int[] distance = graph.findDijkstra(src);
 		txt1.setText("Distance from source:\n"+combo1.getValue()+" to "+combo2.getValue()+" is "+distance[destination]+" m\n"
 				+graph.printPath(src,destination));
-//		gc2.clearRect(0,0,1920,1080);
+		gc.clearRect(0,0,1920,1080);
 		gc.setStroke(Color.TURQUOISE);
 		graph.drawPath(src,destination,gc);
 		gc.setLineWidth(2);
