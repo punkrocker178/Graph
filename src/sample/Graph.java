@@ -1,6 +1,8 @@
 package sample;
 
 import javafx.geometry.Point2D;
+import javafx.scene.canvas.GraphicsContext;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOError;
@@ -143,6 +145,7 @@ public class Graph{
 	LinkedList<NodeVertex> linkedList[];
 	Point2D vertexPoint[];
 	int numVertex,numVnearby,neighborV;
+	int[] parent;
 	String[] vertexName;
 
 
@@ -194,28 +197,30 @@ public class Graph{
 
 	public int[] findDijkstra(int src){
 //		PriorityQueue<NodeVertex> pq = new PriorityQueue<>(this.numVertex);
+		/*This linked list acts like a Queue*/
 		LinkedList<NodeVertex> pq = new LinkedList<>();
 		int[] distance = new int[this.numVertex];
-		int[] parent = new int[this.numVertex];
+		parent = new int[this.numVertex];
 
 
 		/*Initialize*/
 		for(int i=0;i<this.numVertex;i++){
-			if(i==src)
-				pq.addLast(new NodeVertex(src,0));
-			else {
-				pq.addLast(new NodeVertex(i, 999));
-				distance[i] = 999;
-			}
-		}
-		parent[src] = -1;
-		distance[src] = 0;
+			if(i==src) {
+				pq.addLast(new NodeVertex(src, 0));
 
+				distance[src] = 0;
+			}
+			else {
+				pq.addLast(new NodeVertex(i, 99999));
+				distance[i] = 99999;
+			}
+			parent[i] = -1;
+		}
 
 		while(!pq.isEmpty()){
 
 			NodeVertex u = pq.poll();
-
+			/*Relax edges and update pq*/
 			for(NodeVertex v: this.linkedList[u.vertex] ){
 				if(distance[v.vertex] > distance[u.vertex] + v.weight){
 					distance[v.vertex] = distance[u.vertex] + v.weight;
@@ -232,8 +237,35 @@ public class Graph{
 	{
 		String s="";
 		for (int i = 0; i < this.numVertex; i++)
-			s= s +i+" : "+dist[i]+"\n";
+			s= s +i+" : "+dist[i]+" m\n";
 		return s;
+	}
+
+	/*Print path recursively */
+	public String printPath(int src,int dest){
+		String s = "";
+		 if(dest == src){
+			s = src+"";
+			return s;
+		}
+		s =printPath(src,parent[dest])+"->"+dest;
+		return s;
+
+	}
+
+	public void drawPath(int src, int dest, GraphicsContext gc){
+		double x = this.vertexPoint[dest].getX();
+
+		double y = this.vertexPoint[dest].getY();
+		if(dest == src){
+			x = this.vertexPoint[src].getX();
+			y = this.vertexPoint[src].getY();
+			gc.beginPath();
+			gc.moveTo(x,y);
+			return;
+		}
+		drawPath(src,parent[dest],gc);
+		gc.lineTo(x,y);
 	}
 
 	public double VertexGetX(int vertex){

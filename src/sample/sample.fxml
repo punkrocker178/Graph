@@ -16,17 +16,24 @@
       <ScrollPane fx:id="sp" pannable="true" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <content>
             <Canvas fx:id="canvas" height="1080" width="1920" />
+            <!--<Canvas fx:id="canvas2" height="1080" width="1920" />-->
          </content>
       </ScrollPane>
    </center>
    <left>
-      <VBox fx:id="vbox" prefHeight="670.0" prefWidth="100.0" spacing="10.0" BorderPane.alignment="CENTER">
+      <VBox fx:id="vbox" prefHeight="670.0" prefWidth="136.0" spacing="10.0" BorderPane.alignment="CENTER">
          <BorderPane.margin>
             <Insets />
          </BorderPane.margin>
          <children>
-            <Button fx:id="btn3" mnemonicParsing="false" prefHeight="25.0" prefWidth="60.0" text="Graph" />
-            <Button fx:id="btn2" mnemonicParsing="false" text="Dijkstra" />
+            <Button fx:id="btn3" mnemonicParsing="false" prefHeight="25.0" prefWidth="60.0" text="Graph">
+               <VBox.margin>
+                  <Insets left="25.0" />
+               </VBox.margin></Button>
+            <Button fx:id="btn2" mnemonicParsing="false" text="Dijkstra">
+               <VBox.margin>
+                  <Insets left="25.0" />
+               </VBox.margin></Button>
             <TextArea fx:id="txt1" editable="false" prefHeight="200.0" prefWidth="200.0" wrapText="true" />
          </children>
          <padding>
