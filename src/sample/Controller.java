@@ -159,10 +159,8 @@ public class Controller implements Initializable {
 	}
 	public void drawGraph(GraphicsContext gc,Graph graph){
 		for(int i=0;i< graph.getVertex();i++){
-
 			gc.setFill(Color.CORAL);
 			gc.fillOval(graph.VertexGetX(i),graph.VertexGetY(i),15,15);
-
 			gc.setFill(Color.BLACK);
 			gc.fillText(graph.getVertexName(i),graph.VertexGetX(i)-20,graph.VertexGetY(i)-5);
 			gc.fillText(i+"/",graph.VertexGetX(i)-30,graph.VertexGetY(i)-5);
@@ -171,13 +169,28 @@ public class Controller implements Initializable {
 	}
 
 
-	/*Show path*/
+	/*Show path of the source to destination
+	* Show each vertex and lines */
 	public void fromTo(Graph graph,int src,int destination,GraphicsContext gc){
+
+		/*Show on mini text area*/
 		int[] distance = graph.findDijkstra(src);
 		txt1.setText("Distance from source:\n"+combo1.getValue()+" to "+combo2.getValue()+" is "+distance[destination]+" m\n"
 				+graph.printPath(src,destination));
+
+		/*Clear old vertex and line each time */
 		gc.clearRect(0,0,1920,1080);
 		gc.setStroke(Color.TURQUOISE);
+		/*Draw the source vertex and then draw the rest
+		* I know this code is cheesy
+		* SHOULD BE OPTIMIZED IN THE FUTURE*/
+		gc.setFill(Color.CORAL);
+		gc.fillOval(graph.VertexGetX(src),graph.VertexGetY(src),15,15);
+		gc.setFill(Color.BLACK);
+		gc.fillText(graph.getVertexName(src),graph.VertexGetX(src)-20,graph.VertexGetY(src)-5);
+		gc.fillText(src+"/",graph.VertexGetX(src)-30,graph.VertexGetY(src)-5);
+
+		/*Draw vertex and lines connected to*/
 		graph.drawPath(src,destination,gc);
 		gc.setLineWidth(2);
 		gc.stroke();

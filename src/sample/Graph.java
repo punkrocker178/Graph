@@ -2,6 +2,7 @@ package sample;
 
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -265,6 +266,13 @@ public class Graph{
 			return;
 		}
 		drawPath(src,parent[dest],gc);
+
+		gc.setFill(Color.CORAL);
+		gc.fillOval(this.vertexPoint[dest].getX(),this.vertexPoint[dest].getY(),15,15);
+		gc.setFill(Color.BLACK);
+		gc.fillText(this.getVertexName(dest),this.vertexPoint[dest].getX()-15,this.vertexPoint[dest].getY()-15);
+		gc.fillText(dest+"/",this.vertexPoint[dest].getX()-5,this.vertexPoint[dest].getY()-5);
+
 		gc.lineTo(x,y);
 	}
 
