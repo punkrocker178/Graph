@@ -7,6 +7,8 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -14,7 +16,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane fx:id="border" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720" prefWidth="1280" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<BorderPane fx:id="border" maxHeight="1080.0" maxWidth="1920.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
    <!--<center>-->
       <!--&lt;!&ndash;<ScrollPane fx:id="sp" pannable="true" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">&ndash;&gt;-->
          <!--&lt;!&ndash;<content>&ndash;&gt;-->
@@ -29,6 +31,11 @@
             <Insets />
          </BorderPane.margin>
          <children>
+            <ToggleButton fx:id="toggle" mnemonicParsing="false" text="Checkpoint" />
+            <Label text="X" />
+            <TextField fx:id="txt2" />
+            <Label text="Y" />
+            <TextField fx:id="txt3" />
             <Button fx:id="btn3" mnemonicParsing="false" prefHeight="25.0" prefWidth="60.0" text="Graph">
                <VBox.margin>
                   <Insets left="25.0" />
@@ -62,15 +69,16 @@
       <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
    </padding>
    <center>
-      <ScrollPane fx:id="sp" hbarPolicy="ALWAYS" pannable="true" prefHeight="200.0" prefWidth="200.0" vbarPolicy="ALWAYS" BorderPane.alignment="CENTER">
+      <ScrollPane fx:id="sp" hbarPolicy="ALWAYS" maxHeight="2160.0" maxWidth="3840.0" pannable="true" vbarPolicy="ALWAYS" BorderPane.alignment="CENTER">
          <content>
-            <StackPane fx:id="stack" prefHeight="720.0" prefWidth="1280.0">
+            <StackPane fx:id="stack">
                <children>
-                  <ImageView fx:id="img" fitHeight="1080" fitWidth="1920" pickOnBounds="true" preserveRatio="true">
+
+                  <ImageView fx:id="img" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../Map/2.png" />
+                        <Image url="@../../Map/3.png" />
                      </image></ImageView>
-                  <Canvas fx:id="canvas" height="1080" width="1920" />
+                  <Canvas fx:id="canvas" height="2160.0" width="3840.0" />
                </children>
             </StackPane>
          </content>

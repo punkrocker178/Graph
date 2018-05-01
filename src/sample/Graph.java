@@ -11,136 +11,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.PriorityQueue;
-//
-//
-//public class Graph {
-//
-//	private LinkedList<Integer> adjacencyList[];
-//	private int Vertex;
-//	private String[] VertexName;
-//	private Point2D vertexPoint[];
-//	private double adjacencyMatrix[][];
-//	BufferedReader reader;
-//
-//
-//	public Graph(String fileName){
-//		String line = "";
-//		String[] st ;
-//		Integer NumvNearby,vNearby;
-//		try {
-//
-//			reader = new BufferedReader(new FileReader(fileName));
-//			Vertex = Integer.parseInt(reader.readLine());
-//			/*adjacencyList size depends on number of vertices*/
-//			adjacencyList = new LinkedList[Vertex];
-//			adjacencyMatrix = new double[Vertex][Vertex];
-//			VertexName = new String[Vertex];
-//			vertexPoint = new Point2D[Vertex];
-//
-//			/*Initialization*/
-//			for(int i = 0; i < Vertex ; i++){
-//				adjacencyList[i] = new LinkedList<>();
-//				vertexPoint[i] = new Point2D(0,0);
-//				for(int j=0;j<Vertex;j++) {
-//
-//						adjacencyMatrix[i][j] = 0;
-//
-//				}
-//			}
-//
-//			for(int j=0;j<Vertex;j++){
-//				line = reader.readLine();
-//				st = line.trim().split("\\s+");
-//				/*vNearby so luong dinh ke*/
-//				 NumvNearby = Integer.parseInt(st[0]);
-//				for(int i=0;i<NumvNearby;i++){
-//					vNearby =Integer.parseInt(st[i*2+1]);
-//					adjacencyList[j].addFirst(vNearby);
-//					adjacencyMatrix[j][vNearby] = Double.parseDouble(st[i*2+2]);
-//				}
-//				/*Vi tri cua ten dinh dua vao so luong dinh ke +1
-//				* Vd: 2 dinh thi vi tri cua no la (2*2)+1 = 5*/
-//				VertexName[j] = st[NumvNearby*2 +1];
-//				/*Tuong tu vi tri cua dinh,voi x ta cong them 2,voi y ta cong them 3*/
-//				vertexPoint[j] = vertexPoint[j].add(Double.parseDouble(st[NumvNearby*2+2]),Double.parseDouble(st[NumvNearby*2+3]));
-//				/*----------------------*/
-//			}
-//
-//
-//
-//		}catch(IOException error){
-//
-//			error.printStackTrace();
-//		}
-//	}
-//	public void print(){
-//
-//		for(int v = 0; v < this.Vertex; v++)
-//		{
-//
-//			System.out.println("Vertex: "+v+" is "+VertexName[v]+" X:"+this.vertexPoint[v].getX()+" Y"+this.vertexPoint[v].getY());
-//
-//
-//			System.out.print("head");
-//			for(Integer pCrawl: this.adjacencyList[v]){
-//				System.out.print(" -> "+pCrawl);
-//			}
-//			System.out.println("\n");
-//
-//		}
-//
-//		for(int j=0;j<this.Vertex;j++){
-//
-//			for (int i=0;i<this.Vertex;i++){
-//				System.out.print(adjacencyMatrix[j][i]+" ");
-//			}
-//			System.out.println();
-//		}
-//	}
-//
-//	int minDistance(int dist[], Boolean sptSet[])
-//	{
-//		// Initialize min value
-//		int min = Integer.MAX_VALUE, min_index=-1;
-//
-//		for (int v = 0; v < this.Vertex; v++)
-//			if (sptSet[v] == false && dist[v] <= min)
-//			{
-//				min = dist[v];
-//				min_index = v;
-//			}
-//
-//		return min_index;
-//	}
-//
-//	public int[] find_dijkstra(int src) {
-//		int dist[] = new int[this.Vertex];
-//		Boolean sptSet[] = new Boolean[this.Vertex];
-//		for (int i = 0; i < this.Vertex; i++)
-//		{
-//			dist[i] = Integer.MAX_VALUE;
-//			sptSet[i] = false;
-//		}
-//		dist[src] = 0;
-//		for (int count = 0; count < this.Vertex-1; count++){
-//			int u = minDistance(dist, sptSet);
-//			sptSet[u] = true;
-//			for (int v = 0; v < this.Vertex; v++){
-//				if (!sptSet[v] && adjacencyMatrix[u][v]!=0 && dist[u] != Integer.MAX_VALUE && dist[u]+adjacencyMatrix[u][v] < dist[v])
-//					dist[v] =  dist[u] + (int)adjacencyMatrix[u][v];
-//			}
-//		}
-//		return dist;
-//	}
-//
-//	public String printSolution(int dist[])
-//	{
-//		String s="";
-//		for (int i = 0; i < this.Vertex; i++)
-//			s= s +i+" : "+dist[i]+"\n";
-//		return s;
-//	}
-
 
 public class Graph{
 	LinkedList<NodeVertex> linkedList[];
@@ -270,8 +140,8 @@ public class Graph{
 		gc.setFill(Color.CORAL);
 		gc.fillOval(this.vertexPoint[dest].getX(),this.vertexPoint[dest].getY(),15,15);
 		gc.setFill(Color.BLACK);
-		gc.fillText(this.getVertexName(dest),this.vertexPoint[dest].getX()-15,this.vertexPoint[dest].getY()-15);
-		gc.fillText(dest+"/",this.vertexPoint[dest].getX()-5,this.vertexPoint[dest].getY()-5);
+		gc.fillText(this.getVertexName(dest),this.vertexPoint[dest].getX()-15,this.vertexPoint[dest].getY()-2);
+		gc.fillText(dest+"/",this.vertexPoint[dest].getX()-30,this.vertexPoint[dest].getY()-2);
 
 		gc.lineTo(x,y);
 	}
@@ -292,22 +162,6 @@ public class Graph{
 		return this.numVertex;
 	}
 
-/*
-public LinkedList<Integer>[] getAdjList(){
-return this.adjacencyList;
-}
 
-public double[][] getAdjMatrix(){
-return this.adjacencyMatrix;
-}
-
-
-public static void main(String[] args){
-Graph gr = new Graph("Graph.txt");
-//		gr.print();
-gr.find_dijkstra(1);
-
-}
-*/
 
 }

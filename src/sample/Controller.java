@@ -9,6 +9,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -24,8 +26,10 @@ public class Controller implements Initializable {
 	@FXML
 	public Canvas canvas;
 
-	public Pane pane;
+	@FXML
+	public ToggleButton toggle;
 
+	@FXML
 	public ImageView img;
 
 	@FXML
@@ -39,6 +43,9 @@ public class Controller implements Initializable {
 
 	@FXML
 	public TextArea txt1;
+
+	@FXML
+	public TextField txt2,txt3;
 
 	@FXML
 	public ComboBox combo1,combo2;
@@ -62,6 +69,7 @@ public class Controller implements Initializable {
 //				"CMT8",
 //				"Phong Vu",
 //				"Cong vien Tao Dan");
+
 		for(int i=0;i<graph.numVertex;i++){
 			combo1.getItems().add(graph.vertexName[i]);
 		}
@@ -70,18 +78,16 @@ public class Controller implements Initializable {
 		combo1.setEditable(true);
 		combo2.setEditable(true);
 
-		Image image= new Image("file:Map\\2.png");
+		Image image= new Image("file:Map\\3.png");
 		img.setImage(image);
+		img.setFitWidth(3840);
+		img.setPreserveRatio(true);
+		img.setSmooth(true);
+		img.setCache(true);
 		sp.setContent(stack);
+
 		GraphicsContext gc = canvas.getGraphicsContext2D();
-//		GraphicsContext gc2 = canvas2.getGraphicsContext2D();
-//		gc.drawImage(img,0,0,witdh,height);
 
-
-////		sp.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
-////		sp.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
-//		sp.setFitToHeight(true); //center
-//		sp.setFitToWidth(true); //center
 
 		final int[] opt = new int[2];
 		btn1.setOnAction(bt1 ->{
@@ -101,6 +107,7 @@ public class Controller implements Initializable {
 
 		/*Draw Graph */
 		btn3.setOnAction( bt2 ->{
+			gc.clearRect(0,0,3840,2160);
 			drawGraph(gc,graph);
 		});
 
@@ -110,7 +117,6 @@ public class Controller implements Initializable {
 			dialog = new TextInputDialog();
 			dialog.setTitle("Input source");
 			dialog.setContentText("Please enter source to find shortest path to all vertices");
-
 			dialog.setHeaderText(null);
 			Optional<String> result = dialog.showAndWait();
 			gc.beginPath();
@@ -124,7 +130,7 @@ public class Controller implements Initializable {
 					txt1.setText(s+graph.printSolution(distance));
 
 				}
-
+				/*Low effort try catch*/
 			}catch(NullPointerException error){
 				Alert alert = new Alert(Alert.AlertType.ERROR);
 				alert.setTitle("Error");
@@ -143,31 +149,35 @@ public class Controller implements Initializable {
 
 		});
 
-//		canvas.setOnMouseClicked(e -> {
-//
-//			e.MOUSE_DRAGGED
-////			gc.setFill(Color.ORANGE);
-////			gc.fillOval(e.getX(),e.getY(),10,10);
-////			pointList.add(point2d.add(e.getX(),e.getY()));
-//			System.out.println(e.getX()+" "+e.getY());
-//			txt1.setText(e.getX()+"");
-////			txt2.setText(e.getY()+"");
-//
-//
-//		});
+		canvas.setOnMousePressed(e -> {
+			if(toggle.isSelected())
+				checkPoint(gc,e);
+		});
+
 
 	}
+
+	/*Draw all vertex*/
 	public void drawGraph(GraphicsContext gc,Graph graph){
 		for(int i=0;i< graph.getVertex();i++){
 			gc.setFill(Color.CORAL);
 			gc.fillOval(graph.VertexGetX(i),graph.VertexGetY(i),15,15);
 			gc.setFill(Color.BLACK);
-			gc.fillText(graph.getVertexName(i),graph.VertexGetX(i)-20,graph.VertexGetY(i)-5);
-			gc.fillText(i+"/",graph.VertexGetX(i)-30,graph.VertexGetY(i)-5);
-
+			gc.fillText(graph.getVertexName(i),graph.VertexGetX(i)-15,graph.VertexGetY(i)-2);
+			gc.fillText(i+"/",graph.VertexGetX(i)-30,graph.VertexGetY(i)-2);
 		}
 	}
 
+	/*Checkpoint to get X and Y*/
+	public void checkPoint(GraphicsContext gc, MouseEvent e){
+		if(e.isSecondaryButtonDown()) {
+			gc.setFill(Color.ORANGE);
+			gc.fillOval(e.getX(), e.getY(), 10, 10);
+			System.out.println(e.getX() + " " + e.getY());
+			txt2.setText(e.getX() + "");
+			txt3.setText(e.getY() + "");
+		}
+	}
 
 	/*Show path of the source to destination
 	* Show each vertex and lines */
@@ -179,20 +189,21 @@ public class Controller implements Initializable {
 				+graph.printPath(src,destination));
 
 		/*Clear old vertex and line each time */
-		gc.clearRect(0,0,1920,1080);
+		gc.clearRect(0,0,3840,2160);
 		gc.setStroke(Color.TURQUOISE);
+		gc.setLineWidth(3.5);
 		/*Draw the source vertex and then draw the rest
 		* I know this code is cheesy
-		* SHOULD BE OPTIMIZED IN THE FUTURE*/
+		* THIS MUST BE REWORKED IN THE FUTURE*/
 		gc.setFill(Color.CORAL);
 		gc.fillOval(graph.VertexGetX(src),graph.VertexGetY(src),15,15);
 		gc.setFill(Color.BLACK);
-		gc.fillText(graph.getVertexName(src),graph.VertexGetX(src)-20,graph.VertexGetY(src)-5);
-		gc.fillText(src+"/",graph.VertexGetX(src)-30,graph.VertexGetY(src)-5);
+		gc.fillText(graph.getVertexName(src),graph.VertexGetX(src)-15,graph.VertexGetY(src)-2);
+		gc.fillText(src+"/",graph.VertexGetX(src)-30,graph.VertexGetY(src)-2);
 
 		/*Draw vertex and lines connected to*/
 		graph.drawPath(src,destination,gc);
-		gc.setLineWidth(2);
+
 		gc.stroke();
 		gc.closePath();
 	}

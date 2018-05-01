@@ -7,12 +7,16 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
+
+
 public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
-        primaryStage.setTitle("Hello Map");
+        primaryStage.setTitle("Hello Map and Dijkstra");
+        Image img = new Image("file:Map\\sword.png");
+        primaryStage.getIcons().add(img);
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }
