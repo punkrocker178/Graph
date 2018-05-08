@@ -36,7 +36,7 @@ public class Controller implements Initializable {
 	public StackPane stack;
 
 	@FXML
-	public Button btn1,btn2,btn3;
+	public Button btn1,btn2,btn3,btnUpdate;
 
 	@FXML
 	public ScrollPane sp;
@@ -50,7 +50,7 @@ public class Controller implements Initializable {
 	@FXML
 	public ComboBox combo1,combo2;
 
-	public TextInputDialog dialog;
+	public TextInputDialog dialog,input;
 
 	final int witdh = 1920;
 	final int height = 1080;
@@ -71,7 +71,7 @@ public class Controller implements Initializable {
 //				"Cong vien Tao Dan");
 
 		for(int i=0;i<graph.numVertex;i++){
-			combo1.getItems().add(graph.vertexName[i]);
+			combo1.getItems().add(graph.vertexName.get(i));
 		}
 
 		combo2.getItems().addAll(combo1.getItems());
@@ -92,12 +92,12 @@ public class Controller implements Initializable {
 		final int[] opt = new int[2];
 		btn1.setOnAction(bt1 ->{
 			for(int i=0;i<graph.numVertex;i++){
-				if(combo1.getValue().equals(graph.vertexName[i])){
+				if(combo1.getValue().equals(graph.vertexName.get(i))){
 					opt[0] = i;
 				}
 			}
 			for(int j=0;j<graph.numVertex;j++){
-				if(combo2.getValue().equals(graph.vertexName[j])){
+				if(combo2.getValue().equals(graph.vertexName.get(j))){
 					opt[1] = j;
 				}
 			}
@@ -149,35 +149,100 @@ public class Controller implements Initializable {
 
 		});
 
+		/*Checkpoint if toggle button is pressed*/
 		canvas.setOnMousePressed(e -> {
 			if(toggle.isSelected())
-				checkPoint(gc,e);
+				checkPoint(gc,e,graph);
 		});
 
+		/*Update comboBox button*/
+		Image updateBtn = new Image("file:Map\\update.png");
+		ImageView imgV = new ImageView(updateBtn);
+		imgV.setFitWidth(25);
+		imgV.setFitHeight(25);
+		btnUpdate.setGraphic(imgV);
+		btnUpdate.setOnAction(bt4->{
+			updateComboBox(graph);
+		});
 
 	}
 
 	/*Draw all vertex*/
 	public void drawGraph(GraphicsContext gc,Graph graph){
+
+		gc.clearRect(0,0,3840,2160);
+
 		for(int i=0;i< graph.getVertex();i++){
 			gc.setFill(Color.CORAL);
 			gc.fillOval(graph.VertexGetX(i),graph.VertexGetY(i),15,15);
 			gc.setFill(Color.BLACK);
 			gc.fillText(graph.getVertexName(i),graph.VertexGetX(i)-15,graph.VertexGetY(i)-2);
 			gc.fillText(i+"/",graph.VertexGetX(i)-30,graph.VertexGetY(i)-2);
+
+		}
+
+	}
+
+
+	/*Need update back to graph*/
+	/*Checkpoint to get X and Y*/
+	public void checkPoint(GraphicsContext gc, MouseEvent e,Graph graph){
+		if(e.isSecondaryButtonDown()) {
+
+
+			/*Ask for nearby points*/
+			Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+			TextInputDialog input = new TextInputDialog();
+			alert.setTitle("Create a new point");
+			alert.setHeaderText("You just pressed on the map");
+			alert.setContentText("Do you want to create a new point?");
+			Optional<ButtonType> result = alert.showAndWait();
+
+			if (result.get() == ButtonType.OK){
+
+
+				input.setTitle("Nearby Points");
+				input.setHeaderText("Point selected");
+				input.setContentText("Please enter nearby points and Vertex name:");
+				Optional<String> result1 =input.showAndWait();
+				result1.ifPresent(nearby -> {
+
+						graph.setVertex(e.getX(),e.getY(),nearby);
+
+				});
+
+				gc.setFill(Color.ORANGE);
+				gc.fillOval(e.getX(), e.getY(), 10, 10);
+	 			System.out.println(e.getX() + " " + e.getY());
+				txt2.setText(e.getX() + "");
+				txt3.setText(e.getY() + "");
+
+			} else {
+				alert.close();
+			}
+
 		}
 	}
 
-	/*Checkpoint to get X and Y*/
-	public void checkPoint(GraphicsContext gc, MouseEvent e){
-		if(e.isSecondaryButtonDown()) {
-			gc.setFill(Color.ORANGE);
-			gc.fillOval(e.getX(), e.getY(), 10, 10);
-			System.out.println(e.getX() + " " + e.getY());
-			txt2.setText(e.getX() + "");
-			txt3.setText(e.getY() + "");
+//	public void printNew(Graph graph){
+//		for(int i=0;i<graph.getVertex();i++){
+//			System.out.println("Vertex:"+i+"\tName:"+graph.vertexName.get(i));
+//			for(NodeVertex v : graph.linkedList.get(i)){
+//				System.out.print(v.vertex+" ");
+//			}
+//			System.out.println();
+//
+//		}
+//	}
+	/*Update new graph*/
+	public void updateComboBox(Graph graph){
+		for(int i=0;i<graph.numVertex;i++){
+			combo1.getItems().add(graph.vertexName.get(i));
 		}
+
+		combo2.getItems().addAll(combo1.getItems());
 	}
+
 
 	/*Show path of the source to destination
 	* Show each vertex and lines */

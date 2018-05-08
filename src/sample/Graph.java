@@ -8,16 +8,17 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOError;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.PriorityQueue;
 
 public class Graph{
-	LinkedList<NodeVertex> linkedList[];
-	Point2D vertexPoint[];
+	ArrayList<LinkedList<NodeVertex>> linkedList;
+	ArrayList<Point2D> vertexPoint;
 	int numVertex,numVnearby,neighborV;
 	int[] parent;
-	String[] vertexName;
+	ArrayList<String> vertexName;
 
 
 	public Graph(String fileName){
@@ -27,14 +28,14 @@ public class Graph{
 			BufferedReader reader = new BufferedReader(new FileReader(fileName));
 
 			this.numVertex = Integer.parseInt(reader.readLine());
-			linkedList = new LinkedList[numVertex];
-			vertexPoint = new Point2D[numVertex];
-			vertexName = new String[numVertex];
+			linkedList = new ArrayList<>();
+			vertexPoint = new ArrayList<>();
+			vertexName = new ArrayList<>(numVertex);
 
 
 			for(int i=0;i<numVertex ;i++ ) {
-				linkedList[i] = new LinkedList<>();
-				vertexPoint[i] = new Point2D(0,0);
+				linkedList.add(new LinkedList<>());
+				vertexPoint.add(new Point2D(0,0)) ;
 			}
 
 			for(int i=0;i<numVertex;i++){
@@ -43,11 +44,14 @@ public class Graph{
 				numVnearby = Integer.parseInt(st[0]);
 				for(int j=0;j<numVnearby;j++){
 					/*						new NodeVertex(int vertex,int weigth)*/
-					linkedList[i].addFirst(new NodeVertex(Integer.parseInt(st[j*2+1]),Integer.parseInt(st[j*2+2])));
+//					linkedList[i].addFirst(new NodeVertex(Integer.parseInt(st[j*2+1]),Integer.parseInt(st[j*2+2])));
+					linkedList.get(i).addFirst(new NodeVertex(Integer.parseInt(st[j*2+1]),Integer.parseInt(st[j*2+2])));
 				}
-				vertexName[i] = st[2*numVnearby+1];
-				vertexPoint[i] = vertexPoint[i].add(Double.parseDouble(st[2*numVnearby+2]),Double.parseDouble(st[2*numVnearby+3]));
-
+//				vertexName[i] = st[2*numVnearby+1];
+				vertexName.add(st[2*numVnearby+1]);
+//				vertexPoint[i] = vertexPoint[i].add(Double.parseDouble(st[2*numVnearby+2]),Double.parseDouble(st[2*numVnearby+3]));
+				vertexPoint.set(i,vertexPoint.get(i).add(Double.parseDouble(st[2*numVnearby+2]),Double.parseDouble(st[2*numVnearby+3])));
+				System.out.println(this.vertexName.get(i)+"\t"+this.vertexPoint.get(i));
 			}
 
 		}catch(IOException e){
@@ -57,9 +61,9 @@ public class Graph{
 
 	public void print(){
 		for(int i =0;i<this.numVertex;i++){
-			System.out.println(vertexName[i]+"\tX:"+vertexPoint[i].getX()+"\tY:"+vertexPoint[i].getY());
+			System.out.println(vertexName.get(i)+"\tX:"+vertexPoint.get(i).getX()+"\tY:"+vertexPoint.get(i).getY());
 			System.out.print("Head");
-			for(NodeVertex node:this.linkedList[i]){
+			for(NodeVertex node:this.linkedList.get(i)){
 				System.out.print(" -> ("+node.vertex+","+node.weight+")");
 			}
 			System.out.println();
@@ -92,7 +96,7 @@ public class Graph{
 
 			NodeVertex u = pq.poll();
 			/*Relax edges and update pq*/
-			for(NodeVertex v: this.linkedList[u.vertex] ){
+			for(NodeVertex v: this.linkedList.get(u.vertex) ){
 				if(distance[v.vertex] > distance[u.vertex] + v.weight){
 					distance[v.vertex] = distance[u.vertex] + v.weight;
 					parent[v.vertex] = u.vertex;
@@ -125,12 +129,12 @@ public class Graph{
 	}
 
 	public void drawPath(int src, int dest, GraphicsContext gc){
-		double x = this.vertexPoint[dest].getX();
+		double x = this.vertexPoint.get(dest).getX();
 
-		double y = this.vertexPoint[dest].getY();
+		double y = this.vertexPoint.get(dest).getY();
 		if(dest == src){
-			x = this.vertexPoint[src].getX();
-			y = this.vertexPoint[src].getY();
+			x = this.vertexPoint.get(src).getX();
+			y =this.vertexPoint.get(src).getY();
 			gc.beginPath();
 			gc.moveTo(x,y);
 			return;
@@ -138,24 +142,48 @@ public class Graph{
 		drawPath(src,parent[dest],gc);
 
 		gc.setFill(Color.CORAL);
-		gc.fillOval(this.vertexPoint[dest].getX(),this.vertexPoint[dest].getY(),15,15);
+		gc.fillOval(this.vertexPoint.get(dest).getX(),this.vertexPoint.get(dest).getY(),15,15);
 		gc.setFill(Color.BLACK);
-		gc.fillText(this.getVertexName(dest),this.vertexPoint[dest].getX()-15,this.vertexPoint[dest].getY()-2);
-		gc.fillText(dest+"/",this.vertexPoint[dest].getX()-30,this.vertexPoint[dest].getY()-2);
+		gc.fillText(this.getVertexName(dest),this.vertexPoint.get(dest).getX()-15,this.vertexPoint.get(dest).getY()-2);
+		gc.fillText(dest+"/",this.vertexPoint.get(dest).getX()-30,vertexPoint.get(dest).getY()-2);
 
 		gc.lineTo(x,y);
 	}
 
 	public double VertexGetX(int vertex){
-		return this.vertexPoint[vertex].getX();
+		return this.vertexPoint.get(vertex).getX();
 	}
 
 	public double VertexGetY(int vertex){
-		return this.vertexPoint[vertex].getY();
+		return this.vertexPoint.get(vertex).getY();
 	}
 
 	public String getVertexName(int vertex){
-		return this.vertexName[vertex];
+		return this.vertexName.get(vertex);
+	}
+
+	public void setVertex(double x,double y,String otherData){
+
+		String[] chop = otherData.split("[^0-9]");
+		String[] name = otherData.split("[^a-zA-z]");
+		ArrayList<Integer> weight = new ArrayList<>();
+		ArrayList<Integer> vNearby = new ArrayList<>();
+
+
+		for(int i=0;i<chop.length/2;i++){
+			vNearby.add(Integer.parseInt(chop[2*i]));
+			weight.add(Integer.parseInt(chop[2*i+1]));
+		}
+		int numVertexNearby = vNearby.size();
+		this.numVertex = numVertex+1;
+		this.linkedList.add(new LinkedList<>());
+		this.vertexName.add(name[name.length-1]);
+		this.vertexPoint.add(new Point2D(x,y));
+
+		for(int i=0;i<numVertexNearby;i++) {
+			this.linkedList.get(numVertex-1).addFirst(new NodeVertex(vNearby.get(i),weight.get(i)));
+		}
+		System.out.println("Numbers of vertices:"+numVertex+"\t"+vertexName.get(numVertex-1)+"\t"+linkedList.get(numVertex-1).getFirst().vertex+"\t"+linkedList.get(numVertex-1).getFirst().weight);
 	}
 
 	public int getVertex(){

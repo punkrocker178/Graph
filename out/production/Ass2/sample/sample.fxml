@@ -59,6 +59,7 @@
             <Label text="To" />
             <ComboBox fx:id="combo2" prefWidth="150.0" />
             <Button fx:id="btn1" mnemonicParsing="false" text="Go go go" />
+            <Button fx:id="btnUpdate" mnemonicParsing="false" />
          </items>
          <BorderPane.margin>
             <Insets />
